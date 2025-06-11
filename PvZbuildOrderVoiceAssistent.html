@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Speech to Speech Bot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    button {
+      margin-right: 10px;
+      padding: 10px 15px;
+      font-size: 16px;
+    }
+    #status {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎙️ Speech-to-Speech Bot</h2>
+  <button onclick="startListening()">Start Listening</button>
+  <!-- <button onclick="stopListening()">Stop Listening</button> -->
+  <p id="status">Status: Idle</p>
+
+  <script>
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    const synth = window.speechSynthesis;
+
+    keywords = {
+      "scout": "lings, hydra, second gas",
+	  "bill": "check gas mining",
+	  "mute": "D T, lot attack, third nexus, corsairs archon defense",
+	  
+	  "test": "Hi there! How can I help you?",
+      "weather": "The weather today is sunny and bright.",
+      "bye": "Goodbye! Talk to you soon."
+    };
+
+    recognition.continuous = true;
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+      document.getElementById('status').textContent = 'Status: Listening...';
+    };
+
+    recognition.onend = () => {
+      document.getElementById('status').textContent = 'Status: Idle';
+	  recognition.start();
+	  document.getElementById('status').textContent = 'Status: Listening...';
+    };
+
+    recognition.onresult = (event) => {
+      transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
+
+      for (key in keywords) {
+        if (transcript.includes(key)) {
+          speak(keywords[key]);
+          return;
+        }
+      }
+
+      speak("none");
+    };
+
+    function speak(text) {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'en-US';
+      synth.speak(utter);
+    }
+
+    function startListening() {
+      recognition.start();
+    }
+
+    function stopListening() {
+      recognition.stop();
+    }
+  </script>
+</body>
+</html>
