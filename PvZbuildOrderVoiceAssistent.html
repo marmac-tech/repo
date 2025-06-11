@@ -45,7 +45,8 @@
     recognition.continuous = true;
     recognition.lang = 'en-US';
     recognition.interimResults = false;
-
+    recognition.start();	
+	  
     recognition.onstart = () => {
       document.getElementById('status').textContent = 'Status: Listening...';
     };
